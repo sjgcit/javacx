@@ -2,7 +2,7 @@
 /*
  * javacx.java
  *
- * $Id: javacx.java,v 1.31 2013/09/16 01:35:01 sjg Exp $
+ * $Id: javacx.java,v 1.32 2014/12/18 05:28:03 sjg Exp $
  *
  * (c) Stephen Geary, Sep 2013
  *
@@ -18,7 +18,7 @@ import javax.tools.*;
 
 public class javacx
 {
-    private static String version = "$Revision: 1.31 $" ;
+    private static String version = "$Revision: 1.32 $" ;
 
     public static boolean echoProcOutToErr = false ;
 
@@ -133,7 +133,7 @@ public class javacx
         {
             // a javax command to show the version of javax
         
-            System.out.println( "javax " + javacx.version.substring( 10, javacx.version.length()-2 ) ) ;
+            System.out.println( "javacx " + javacx.version.substring( 10, javacx.version.length()-2 ) ) ;
             
             return 1 ;
         }
