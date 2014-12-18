@@ -2,7 +2,7 @@
 /*
  * javacxUtil.java
  *
- * $Id: javacxUtil.java,v 1.13 2013/09/21 12:10:43 sjg Exp $
+ * $Id: javacxUtil.java,v 1.19 2014/12/18 17:59:44 sjg Exp $
  *
  * (c) Stephen Geary, Sep 2013
  *
@@ -50,7 +50,7 @@ public class javacxUtil
             return null ;
         }
         
-        sb = javacxUtil.processToStringBuilder( is, cmdlist ) ;
+        sb = javacxUtil.processToStringBuilder( u, is, cmdlist ) ;
         
         javacxUtil.closeStream( is ) ;
         
@@ -61,7 +61,7 @@ public class javacxUtil
     
 
     
-    public static StringBuilder processToStringBuilder( InputStream is, ArrayList<String> cmdlist )
+    public static StringBuilder processToStringBuilder( URI u, InputStream is, ArrayList<String> cmdlist )
     {
         /* A process that handles a sources file is going to produce
          * a relatively large output compared to the default initial
@@ -70,6 +70,8 @@ public class javacxUtil
          * source files.
          */
         StringBuilder sb = new StringBuilder( 16384 ) ;
+        
+        String tmpstr = null ;
         
         int c = 0 ;
         
@@ -168,6 +170,32 @@ public class javacxUtil
             
             // read the input and redirect the data to the input
             // stream of the process
+            
+            /* Special handling of commands cpp, clang and gcc
+             * where we add the #define __JAVA_FILE_ <filename>
+             */
+            
+            if( cmd.startsWith("cpp") || cmd.startsWith("gcc") || cmd.startsWith("clang") )
+            {
+                String us = u.toString() ;
+                
+                int k = us.lastIndexOf('/') ;
+                
+                us = us.substring( k+1 ) ;
+                
+                // javacx.debug( "cpp, gcc or clang detected : prefixing __JAVA_FILE__ to "  + us + " stream." ) ;
+                
+                byte b[] = ( "#define __JAVA_FILE__ \"" + us + "\"\n" ).getBytes() ;
+                
+                try
+                {
+                    pos.write( b ) ;
+                }
+                catch( IOException ioe )
+                {
+                    javacx.debug( ioe ) ;
+                }
+            }
             
             javacxUtil.pipeAll( tis, pos ) ;
             
@@ -320,4 +348,5 @@ public class javacxUtil
         };
     }
 }
+
 
