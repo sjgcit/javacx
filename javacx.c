@@ -2,7 +2,7 @@
 /*
  * javacx.c
  *
- * $Id: javacx.c,v 1.24 2013/09/16 01:35:01 sjg Exp $
+ * $Id: javacx.c,v 1.26 2014/12/18 05:28:26 sjg Exp $
  *
  * (c) Stephen Geary, Sep 2013
  *
@@ -12,7 +12,7 @@
 
 /*
 #define DEBUGME
- */
+*/
 
 #include <stdio.h>
 
@@ -51,7 +51,7 @@
 #  define FALSE 0
 #endif
 
-#define _FREEMEM(_p)    { if( (_p) != NULL ){ free( (_p) ) ; } ; }
+#define _FREEMEM(_p)    { if( (_p) != NULL ){ free( (_p) ) ; (_p) = NULL ; } ; }
 
 
 int main( int argc, char **argv )
@@ -135,6 +135,8 @@ int main( int argc, char **argv )
                 passarg[i] = FALSE ;
                 
                 javacxpath = argv[i] ;
+                
+                _DEBUGF( "javacxpath = %s\n", javacxpath ) ;
             }
             else
             {
@@ -238,9 +240,9 @@ int main( int argc, char **argv )
         }
 
 #     if defined(_WIN32) || defined(_WIN64)
-        sprintf( p, "\"%s;%s\\*;.;.\\*\"\0", javacxpath, javacxpath ) ;
+        sprintf( p, "\"%s;%s\\*;.;.\\*\"", javacxpath, javacxpath ) ;
 #     else
-        sprintf( p, "\"%s:%s/*:.:./*\"\0", javacxpath, javacxpath ) ;
+        sprintf( p, "\"%s:%s/*:.:./*\"", javacxpath, javacxpath ) ;
 #     endif
         
         newargs[ i++ ] = "-cp" ;
