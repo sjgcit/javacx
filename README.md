@@ -9,6 +9,8 @@ Here is a quick example :
 javacx -javacx:cpp mystuff.java
 ~~~~
 
+This compiles mystuff.java by first preprocessing the source ( and *any* source files the compiler accesses, listed on the command line or not ). It's all done behind the scenes and transparently. No temporary files are created.
+
 If you've never used a preprocessor with Java or not wanted to, this may be an opportunity to try them out. Preprocessors are powerful tools for the programmer. For programmers like me who grew up on C, not having support for preprocessing is like loosing an old friend ( albeit a fussy old friend ).
 
 The Java compiler has no support for preprocesing of source files. Like many programmers I find myself wanting to use macros ( particularly C style macros ) when I use Java. With the standard compiler command ( javac ) I cannot do that easily, so I wrote **javacx** to support preprocessing.
